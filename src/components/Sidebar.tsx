@@ -52,7 +52,7 @@ export function Sidebar({
 
   const addChoice = () => {
     const choice: Choice = {
-      id: createId('انتخاب'),
+      id: createId('choice'),
       label: 'انتخاب جدید',
       target: '',
     }

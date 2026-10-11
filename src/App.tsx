@@ -14,7 +14,7 @@ export default function App() {
   const [showJson, setShowJson] = useState(true)
 
   const addNode = () => {
-    const id = createId('گره')
+    const id = createId('node')
     const node = {
       id,
       title: 'گره جدید',

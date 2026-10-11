@@ -9,7 +9,11 @@ export type StoryNodeData = {
   selectedChoiceId: string | null
 }
 
-export function graphToFlow(graph: StoryGraph, selectedChoiceId: string | null = null): {
+export function graphToFlow(
+  graph: StoryGraph,
+  selectedChoiceId: string | null = null,
+  selectedNodeId: string | null = null,
+): {
   nodes: Node<StoryNodeData>[]
   edges: Edge[]
 } {
@@ -17,6 +21,7 @@ export function graphToFlow(graph: StoryGraph, selectedChoiceId: string | null =
     id: n.id,
     type: 'story',
     position: n.position,
+    selected: n.id === selectedNodeId,
     data: {
       title: n.title,
       text: n.text,

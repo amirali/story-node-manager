@@ -39,8 +39,8 @@ export function GraphCanvas({
   onConnectChoice,
 }: Props) {
   const { nodes: flowNodes, edges: flowEdges } = useMemo(
-    () => graphToFlow(graph, selectedChoiceId),
-    [graph, selectedChoiceId],
+    () => graphToFlow(graph, selectedChoiceId, selectedNodeId),
+    [graph, selectedChoiceId, selectedNodeId],
   )
 
   const [nodes, setNodes, onNodesChange] = useNodesState(flowNodes)

@@ -24,7 +24,7 @@ export function createId(prefix: string): string {
 }
 
 export function emptyGraph(): StoryGraph {
-  const id = createId('گره')
+  const id = createId('node')
   return {
     start: id,
     nodes: [
