@@ -4,17 +4,28 @@ export type ItemAmount = {
   quantity: number
 }
 
+export type Conditions = {
+  items: ItemAmount[]
+  resources: ItemAmount[]
+  /** Achievement slugs. */
+  achievements: string[]
+}
+
+export function emptyConditions(): Conditions {
+  return { items: [], resources: [], achievements: [] }
+}
+
 export type Choice = {
   id: string
   label: string
   /** Node id this choice leads to. Empty string = unlinked. */
   target: string
-  /** Items/resources the player must have to pick this choice. */
-  requirements: ItemAmount[]
+  /** What the player must have to pick this choice. */
+  requirements: Conditions
   /** Text shown after picking the choice, before the next node. */
   response: string
-  /** Inventory changes applied on pick; negative quantity = spend/lose. */
-  effects: ItemAmount[]
+  /** Changes applied on pick; negative quantity = spend/lose, achievements are granted. */
+  effects: Conditions
 }
 
 export type StoryNode = {

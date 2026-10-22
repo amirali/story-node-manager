@@ -1,4 +1,12 @@
-import { createId, type Choice, type ItemAmount, type StoryGraph, type StoryNode } from '../types'
+import {
+  createId,
+  emptyConditions,
+  type Choice,
+  type Conditions,
+  type ItemAmount,
+  type StoryGraph,
+  type StoryNode,
+} from '../types'
 
 function ItemAmountList({
   title,
@@ -46,6 +54,69 @@ function ItemAmountList({
         + افزودن
       </button>
     </div>
+  )
+}
+
+function SlugList({
+  title,
+  slugs,
+  onChange,
+}: {
+  title: string
+  slugs: string[]
+  onChange: (slugs: string[]) => void
+}) {
+  return (
+    <div className="field" onClick={(e) => e.stopPropagation()}>
+      <span>{title}</span>
+      {slugs.map((slug, i) => (
+        <div key={i} className="item-row item-row--slug">
+          <input
+            value={slug}
+            onChange={(e) => onChange(slugs.map((s, j) => (j === i ? e.target.value : s)))}
+            placeholder="slug"
+            dir="ltr"
+          />
+          <button
+            type="button"
+            className="btn btn-danger btn-small"
+            onClick={() => onChange(slugs.filter((_, j) => j !== i))}
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button type="button" className="btn btn-ghost btn-small" onClick={() => onChange([...slugs, ''])}>
+        + افزودن
+      </button>
+    </div>
+  )
+}
+
+function ConditionsEditor({
+  title,
+  value,
+  onChange,
+}: {
+  title: string
+  value: Conditions
+  onChange: (value: Conditions) => void
+}) {
+  return (
+    <fieldset className="conditions">
+      <legend>{title}</legend>
+      <ItemAmountList title="آیتم‌ها" items={value.items} onChange={(items) => onChange({ ...value, items })} />
+      <ItemAmountList
+        title="منابع"
+        items={value.resources}
+        onChange={(resources) => onChange({ ...value, resources })}
+      />
+      <SlugList
+        title="دستاوردها"
+        slugs={value.achievements}
+        onChange={(achievements) => onChange({ ...value, achievements })}
+      />
+    </fieldset>
   )
 }
 
@@ -104,9 +175,9 @@ export function Sidebar({
       id: createId('choice'),
       label: 'انتخاب جدید',
       target: '',
-      requirements: [],
+      requirements: emptyConditions(),
       response: '',
-      effects: [],
+      effects: emptyConditions(),
     }
     updateNode({ choices: [...node.choices, choice] })
     onSelectChoice(choice.id)
@@ -203,9 +274,9 @@ export function Sidebar({
               </select>
             </label>
 
-            <ItemAmountList
-              title="نیازمندی‌ها (آیتم/منبع)"
-              items={choice.requirements}
+            <ConditionsEditor
+              title="نیازمندی‌ها"
+              value={choice.requirements}
               onChange={(requirements) => updateChoice(choice.id, { requirements })}
             />
 
@@ -219,9 +290,9 @@ export function Sidebar({
               />
             </label>
 
-            <ItemAmountList
-              title="اثرها (منفی = مصرف)"
-              items={choice.effects}
+            <ConditionsEditor
+              title="اثرها (مقدار منفی = مصرف، دستاورد = اعطا)"
+              value={choice.effects}
               onChange={(effects) => updateChoice(choice.id, { effects })}
             />
 

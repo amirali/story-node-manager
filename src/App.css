@@ -468,3 +468,21 @@ code {
   grid-template-columns: 1fr 5rem auto;
   gap: 0.35rem;
 }
+
+.item-row--slug {
+  grid-template-columns: 1fr auto;
+}
+
+.conditions {
+  display: grid;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.65rem 0.65rem;
+}
+
+.conditions legend {
+  font-size: 0.72rem;
+  color: var(--muted);
+  padding: 0 0.25rem;
+}

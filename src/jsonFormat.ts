@@ -1,4 +1,4 @@
-import type { Choice, ItemAmount, StoryGraph, StoryNode } from './types'
+import type { Choice, Conditions, ItemAmount, StoryGraph, StoryNode } from './types'
 
 function parseItemAmounts(raw: unknown, where: string): ItemAmount[] {
   if (raw === undefined) return []
@@ -13,6 +13,23 @@ function parseItemAmounts(raw: unknown, where: string): ItemAmount[] {
     }
     return { slug: item.slug, quantity: item.quantity }
   })
+}
+
+function parseConditions(raw: unknown, where: string): Conditions {
+  if (raw === undefined) return { items: [], resources: [], achievements: [] }
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    throw new Error(`${where} must be an object with items, resources and achievements`)
+  }
+  const c = raw as Record<string, unknown>
+  const achievements = c.achievements ?? []
+  if (!Array.isArray(achievements) || achievements.some((a) => typeof a !== 'string' || !a)) {
+    throw new Error(`${where}.achievements must be an array of slugs`)
+  }
+  return {
+    items: parseItemAmounts(c.items, `${where}.items`),
+    resources: parseItemAmounts(c.resources, `${where}.resources`),
+    achievements,
+  }
 }
 
 export function stringifyGraphJson(graph: StoryGraph): string {
@@ -53,9 +70,9 @@ export function parseGraphJson(raw: string): StoryGraph {
         id: c.id,
         label: typeof c.label === 'string' ? c.label : 'Choice',
         target: typeof c.target === 'string' ? c.target : '',
-        requirements: parseItemAmounts(c.requirements, `Choice «${c.id}» requirements`),
+        requirements: parseConditions(c.requirements, `Choice «${c.id}» requirements`),
         response: typeof c.response === 'string' ? c.response : '',
-        effects: parseItemAmounts(c.effects, `Choice «${c.id}» effects`),
+        effects: parseConditions(c.effects, `Choice «${c.id}» effects`),
       }
     })
 

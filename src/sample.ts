@@ -9,8 +9,8 @@ export const sampleGraph: StoryGraph = {
       text: 'در دوراهی ایستاده‌ای. مه روی درخت‌ها نشسته است.',
       position: { x: 80, y: 160 },
       choices: [
-        { id: 'to_forest', label: 'مسیر جنگل را برو', target: 'dense_forest', requirements: [{ slug: 'torch', quantity: 1 }], response: 'مشعل را روشن می‌کنی و وارد جنگل می‌شوی.', effects: [{ slug: 'torch', quantity: -1 }] },
-        { id: 'to_village', label: 'به سوی روستا برو', target: 'quiet_village', requirements: [], response: '', effects: [{ slug: 'gold', quantity: 5 }] },
+        { id: 'to_forest', label: 'مسیر جنگل را برو', target: 'dense_forest', requirements: { items: [{ slug: 'torch', quantity: 1 }], resources: [], achievements: [] }, response: 'مشعل را روشن می‌کنی و وارد جنگل می‌شوی.', effects: { items: [{ slug: 'torch', quantity: -1 }], resources: [], achievements: ['forest_explorer'] } },
+        { id: 'to_village', label: 'به سوی روستا برو', target: 'quiet_village', requirements: { items: [], resources: [], achievements: [] }, response: '', effects: { items: [], resources: [{ slug: 'gold', quantity: 5 }], achievements: [] } },
       ],
     },
     {
@@ -19,8 +19,8 @@ export const sampleGraph: StoryGraph = {
       text: 'آواز پرندگان کم می‌شود. چیزی در بوته‌ها جابه‌جا می‌شود.',
       position: { x: 420, y: 40 },
       choices: [
-        { id: 'listen', label: 'با دقت گوش بده', target: 'clearing', requirements: [], response: '', effects: [] },
-        { id: 'go_back', label: 'برگرد', target: 'crossroads', requirements: [], response: '', effects: [] },
+        { id: 'listen', label: 'با دقت گوش بده', target: 'clearing', requirements: { items: [], resources: [], achievements: [] }, response: '', effects: { items: [], resources: [], achievements: [] } },
+        { id: 'go_back', label: 'برگرد', target: 'crossroads', requirements: { items: [], resources: [], achievements: [] }, response: '', effects: { items: [], resources: [], achievements: [] } },
       ],
     },
     {
@@ -29,8 +29,8 @@ export const sampleGraph: StoryGraph = {
       text: 'کرکره‌ها بسته‌اند. تنها یک فانوس کنار چاه روشن است.',
       position: { x: 420, y: 280 },
       choices: [
-        { id: 'approach_well', label: 'نزدیک چاه شو', target: 'clearing', requirements: [], response: '', effects: [] },
-        { id: 'knock_door', label: 'به دری بکوب', target: 'crossroads', requirements: [], response: '', effects: [] },
+        { id: 'approach_well', label: 'نزدیک چاه شو', target: 'clearing', requirements: { items: [], resources: [], achievements: [] }, response: '', effects: { items: [], resources: [], achievements: [] } },
+        { id: 'knock_door', label: 'به دری بکوب', target: 'crossroads', requirements: { items: [], resources: [], achievements: [] }, response: '', effects: { items: [], resources: [], achievements: [] } },
       ],
     },
     {
