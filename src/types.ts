@@ -1,8 +1,20 @@
+/** An item or resource referenced by slug. */
+export type ItemAmount = {
+  slug: string
+  quantity: number
+}
+
 export type Choice = {
   id: string
   label: string
   /** Node id this choice leads to. Empty string = unlinked. */
   target: string
+  /** Items/resources the player must have to pick this choice. */
+  requirements: ItemAmount[]
+  /** Text shown after picking the choice, before the next node. */
+  response: string
+  /** Inventory changes applied on pick; negative quantity = spend/lose. */
+  effects: ItemAmount[]
 }
 
 export type StoryNode = {

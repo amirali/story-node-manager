@@ -1,4 +1,19 @@
-import type { Choice, StoryGraph, StoryNode } from './types'
+import type { Choice, ItemAmount, StoryGraph, StoryNode } from './types'
+
+function parseItemAmounts(raw: unknown, where: string): ItemAmount[] {
+  if (raw === undefined) return []
+  if (!Array.isArray(raw)) throw new Error(`${where} must be an array`)
+  return raw.map((rawItem, i) => {
+    const item = (rawItem ?? {}) as Record<string, unknown>
+    if (typeof item.slug !== 'string' || !item.slug) {
+      throw new Error(`${where}[${i}] needs a slug`)
+    }
+    if (typeof item.quantity !== 'number' || !Number.isFinite(item.quantity)) {
+      throw new Error(`${where}[${i}] needs a numeric quantity`)
+    }
+    return { slug: item.slug, quantity: item.quantity }
+  })
+}
 
 export function stringifyGraphJson(graph: StoryGraph): string {
   return JSON.stringify(graph, null, 2)
@@ -38,6 +53,9 @@ export function parseGraphJson(raw: string): StoryGraph {
         id: c.id,
         label: typeof c.label === 'string' ? c.label : 'Choice',
         target: typeof c.target === 'string' ? c.target : '',
+        requirements: parseItemAmounts(c.requirements, `Choice «${c.id}» requirements`),
+        response: typeof c.response === 'string' ? c.response : '',
+        effects: parseItemAmounts(c.effects, `Choice «${c.id}» effects`),
       }
     })
 

@@ -1,4 +1,53 @@
-import { createId, type Choice, type StoryGraph, type StoryNode } from '../types'
+import { createId, type Choice, type ItemAmount, type StoryGraph, type StoryNode } from '../types'
+
+function ItemAmountList({
+  title,
+  items,
+  onChange,
+}: {
+  title: string
+  items: ItemAmount[]
+  onChange: (items: ItemAmount[]) => void
+}) {
+  const update = (i: number, patch: Partial<ItemAmount>) =>
+    onChange(items.map((it, j) => (j === i ? { ...it, ...patch } : it)))
+
+  return (
+    <div className="field" onClick={(e) => e.stopPropagation()}>
+      <span>{title}</span>
+      {items.map((item, i) => (
+        <div key={i} className="item-row">
+          <input
+            value={item.slug}
+            onChange={(e) => update(i, { slug: e.target.value })}
+            placeholder="slug"
+            dir="ltr"
+          />
+          <input
+            type="number"
+            value={item.quantity}
+            onChange={(e) => update(i, { quantity: Number(e.target.value) })}
+            dir="ltr"
+          />
+          <button
+            type="button"
+            className="btn btn-danger btn-small"
+            onClick={() => onChange(items.filter((_, j) => j !== i))}
+          >
+            ×
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        className="btn btn-ghost btn-small"
+        onClick={() => onChange([...items, { slug: '', quantity: 1 }])}
+      >
+        + افزودن
+      </button>
+    </div>
+  )
+}
 
 type Props = {
   graph: StoryGraph
@@ -55,6 +104,9 @@ export function Sidebar({
       id: createId('choice'),
       label: 'انتخاب جدید',
       target: '',
+      requirements: [],
+      response: '',
+      effects: [],
     }
     updateNode({ choices: [...node.choices, choice] })
     onSelectChoice(choice.id)
@@ -150,6 +202,28 @@ export function Sidebar({
                 ))}
               </select>
             </label>
+
+            <ItemAmountList
+              title="نیازمندی‌ها (آیتم/منبع)"
+              items={choice.requirements}
+              onChange={(requirements) => updateChoice(choice.id, { requirements })}
+            />
+
+            <label className="field">
+              <span>پاسخ (پیش از گرهٔ بعدی)</span>
+              <textarea
+                value={choice.response}
+                onChange={(e) => updateChoice(choice.id, { response: e.target.value })}
+                onClick={(e) => e.stopPropagation()}
+                rows={2}
+              />
+            </label>
+
+            <ItemAmountList
+              title="اثرها (منفی = مصرف)"
+              items={choice.effects}
+              onChange={(effects) => updateChoice(choice.id, { effects })}
+            />
 
             <button
               type="button"

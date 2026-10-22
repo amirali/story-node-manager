@@ -4,7 +4,7 @@ import { JsonPanel } from './components/JsonPanel'
 import { Sidebar } from './components/Sidebar'
 import { applyFlowPositions, removeNode, stringifyGraphJson } from './graph'
 import { sampleGraph } from './sample'
-import { createId, emptyGraph, type StoryGraph } from './types'
+import { createId, emptyGraph, type Choice, type StoryGraph } from './types'
 import './App.css'
 
 export default function App() {
@@ -23,7 +23,7 @@ export default function App() {
         x: 120 + graph.nodes.length * 40,
         y: 80 + graph.nodes.length * 36,
       },
-      choices: [] as { id: string; label: string; target: string }[],
+      choices: [] as Choice[],
     }
     setGraph({ ...graph, nodes: [...graph.nodes, node] })
     setSelectedNodeId(id)
